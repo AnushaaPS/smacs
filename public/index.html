@@ -8,9 +8,15 @@
 <body>
   <div id="content">Loading...</div>
 
-  <script src="js/firebase-config.js"></script>
+  <!-- Firebase SDKs -->
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+
+  <!-- Your Firebase Config -->
+  <script src="js/firebase-config.js"></script>
+
+  <!-- Auth Logic -->
   <script src="js/auth.js"></script>
 
   <script>
@@ -19,7 +25,6 @@
       if (!user) {
         window.location.href = 'login.html';
       } else {
-        // Fetch role from Firestore
         firebase.firestore().collection('users').doc(user.uid).get().then(doc => {
           if (!doc.exists) {
             alert("No user profile found.");
@@ -32,10 +37,12 @@
               window.location.href = 'user.html';
             }
           }
+        }).catch(err => {
+          console.error("Firestore error:", err);
+          alert("Error fetching user profile. Check console.");
         });
       }
     });
   </script>
 </body>
 </html>
-
